@@ -6,4 +6,18 @@ const totalLikes = (blogs) => {
   return blogs.reduce((sum, item) => item.likes + sum, 0);
 };
 
-module.exports = { dummy, totalLikes };
+const favoriteBlog = (blogs) => {
+  if (blogs.length === 0) return null;
+  if (blogs.length === 1) return blogs[0];
+  let blogIndexWithHighestLikes,
+    highestLikes = 0;
+  blogs.forEach((blog, index) => {
+    if (blog.likes > highestLikes) {
+      highestLikes = blog.likes;
+      blogIndexWithHighestLikes = index;
+    }
+  });
+  return blogs[blogIndexWithHighestLikes];
+};
+
+module.exports = { dummy, totalLikes, favoriteBlog };
