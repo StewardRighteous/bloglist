@@ -45,4 +45,24 @@ const mostBlogs = (blogs) => {
   };
 };
 
-module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs };
+const mostLikes = (blogs) => {
+  let mostLikedBlogAuthor, noOfLikes;
+  if (blogs.length === 0) return null;
+  if (blogs.length === 1) {
+    mostLikedBlogAuthor = blogs[0].author;
+    noOfLikes = blogs[0].likes;
+  } else {
+    noOfLikes = _(blogs)
+      .map("likes")
+      .sort((a, b) => b - a)
+      .value()[0];
+    const mostLikedBlogAuthorIndex = _.findKey(blogs, ["likes", noOfLikes]);
+    mostLikedBlogAuthor = blogs[mostLikedBlogAuthorIndex].author;
+  }
+  return {
+    author: mostLikedBlogAuthor,
+    likes: noOfLikes,
+  };
+};
+
+module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes };

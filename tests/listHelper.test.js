@@ -152,3 +152,38 @@ describe("most blogs", () => {
     );
   });
 });
+
+describe("most likes", () => {
+  test("when there is no list return null", () =>
+    assert.strictEqual(listHelper.mostLikes(emptyBlog), null));
+  test("when there is only one return the author and number of likes", () =>
+    assert.deepStrictEqual(listHelper.mostLikes(listWithOneBlog), {
+      author: "Edsger W. Dijkstra",
+      likes: 5,
+    }));
+  test("of all list return blog with more likes and its respective author", () =>
+    assert.deepStrictEqual(listHelper.mostLikes(blogs), {
+      author: "Edsger W. Dijkstra",
+      likes: 12,
+    }));
+  test("when multiple top liked blogs, return any one", () => {
+    const blogWithMultipleMostLikes = [
+      ...blogs,
+      {
+        _id: "5a422aa71b54a676234d17f8",
+        title: "Go To Statement Considered Harmful",
+        author: "Robert C. Martin",
+        url: "https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf",
+        likes: 12,
+        __v: 0,
+      },
+    ];
+    assert.deepStrictEqual(
+      listHelper.mostLikes(blogWithMultipleMostLikes),{
+        author: "Edsger W. Dijkstra",
+        likes: 12,
+      }||
+      { author: "Robert C. Martin", likes: 12 }  
+    );
+  });
+});
