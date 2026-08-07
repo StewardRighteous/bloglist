@@ -26,8 +26,24 @@ test("all blogs are returned", async () => {
 });
 
 test("unique identifier of the blog post named id", async () => {
-  const blogs = (await api.get("/api/blogs"));
+  const blogs = await api.get("/api/blogs");
   assert(Object.keys(blogs.body[0]).includes("id"));
+});
+
+test("new blog is added to the list of blogs", async () => {
+  const newBlog = await api
+    .post("/api/blogs")
+    .send({
+      title: "Go To Statement Considered Harmful",
+      author: "Edsger W. Dijkstra",
+      url: "https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf",
+      likes: 5,
+    })
+    .expect(201)
+    .expect("Content-type", /application\/json/);
+  const blogs = await api.get("/api/blogs");
+  assert.strictEqual(blogs.body.length, testHelper.initialBlogs.length + 1);
+  assert.deepStrictEqual(blogs.body.at(-1), newBlog.body);
 });
 
 after(async () => await mongoose.connection.close());
