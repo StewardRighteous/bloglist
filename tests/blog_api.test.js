@@ -25,4 +25,9 @@ test("all blogs are returned", async () => {
   assert.strictEqual(blogs.body.length, testHelper.initialBlogs.length);
 });
 
+test("unique identifier of the blog post named id", async () => {
+  const blogs = (await api.get("/api/blogs"));
+  assert(Object.keys(blogs.body[0]).includes("id"));
+});
+
 after(async () => await mongoose.connection.close());
