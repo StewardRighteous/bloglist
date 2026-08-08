@@ -59,4 +59,8 @@ test("default likes for a blog is zero", async () => {
   assert.strictEqual(newBlog.body.likes, 0);
 });
 
+test("if title and url missing then it is bad request", async () => {
+  await api.post("/api/blogs").send({}).expect(400);
+});
+
 after(async () => await mongoose.connection.close());
