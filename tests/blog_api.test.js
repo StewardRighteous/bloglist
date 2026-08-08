@@ -46,4 +46,17 @@ test("new blog is added to the list of blogs", async () => {
   assert.deepStrictEqual(blogs.body.at(-1), newBlog.body);
 });
 
+test("default likes for a blog is zero", async () => {
+  const newBlog = await api
+    .post("/api/blogs")
+    .send({
+      title: "Go To Statement Considered Harmful",
+      author: "Edsger W. Dijkstra",
+      url: "https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf",
+    })
+    .expect(201)
+    .expect("Content-type", /application\/json/);
+  assert.strictEqual(newBlog.body.likes, 0);
+});
+
 after(async () => await mongoose.connection.close());
