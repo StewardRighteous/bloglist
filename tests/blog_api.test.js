@@ -76,6 +76,19 @@ describe("BlogList API", () => {
       assert.strictEqual(updatedBlogs.body.length, blogs.body.length - 1);
     });
   });
+
+  describe("editing a blog list", () => {
+    test("if blog id does not exist return 404", async () => {
+      const id = await testHelper.nonExistingId();
+      await api.put(`/api/blogs/${id}`).send({ likes: 5 }).expect(404);
+    });
+    test("edit total number of likes", async () => {
+      const blogs = await api.get("/api/blogs");
+      await api.put(`/api/blogs/${blogs.body[0].id}`).send({ likes: 10 });
+      const updatedBlogs = await api.get("/api/blogs");
+      assert.strictEqual(updatedBlogs.body[0].likes, 10);
+    });
+  });
 });
 
 after(async () => await mongoose.connection.close());
